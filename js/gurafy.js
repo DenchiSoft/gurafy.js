@@ -38,7 +38,6 @@ window.onload = function () {
 
         var mainImage = document.getElementById('gurafy_image');
         var mainCanvas = document.getElementById('gurafy_canvas');
-        var ctx = mainCanvas.getContext('2d');
 
         var profileImage = new Image;
         var overlayImage = new Image;
@@ -47,13 +46,14 @@ window.onload = function () {
         overlayImage.crossOrigin = 'Anonymous';
 
         profileImage.onload = function () {
-            mainCanvas.setAttribute('width', '400');
-            mainCanvas.setAttribute('height', '400');
+            mainImage.style.display = 'none';
+            mainCanvas.style.display = 'inherit';
+            render({
+                mainCanvas,
+                profileImage,
+                overlayImage,
+            });
 
-            ctx.clearRect(0, 0, mainCanvas.width, mainCanvas.height);
-            ctx.drawImage(profileImage, 0, 0, profileImage.width, profileImage.height, 0, 0, mainCanvas.width, mainCanvas.height);
-            ctx.drawImage(overlayImage, 0, 0, overlayImage.width, overlayImage.height, 0, 0, mainCanvas.width, mainCanvas.height);
-			
             var dataURL = mainCanvas.toDataURL();
             mainImage.setAttribute('src', dataURL);
 
@@ -67,6 +67,17 @@ window.onload = function () {
 
         profileImage.src = apiUrl;
         overlayImage.src = gura_hood;
+
+        onDragCanvas(
+            mainCanvas,
+            (posX, posY) => render({
+                mainCanvas,
+                overlayImage,
+                profileImage,
+                profileImagePosX: posX - profileImage.width / 2,
+                profileImagePosY: posY - profileImage.height / 2,
+            }),
+        );
     }
 
     var animateButton = function (e) {
@@ -83,5 +94,57 @@ window.onload = function () {
 
     for (var i = 0; i < bubblyButtons.length; i++) {
         bubblyButtons[i].addEventListener('click', animateButton, false);
+    }
+}
+
+function render({
+    mainCanvas,
+    profileImage,
+    profileImagePosX = 0,
+    profileImagePosY = 0,
+    overlayImage,
+}) {
+    var ctx = mainCanvas.getContext('2d');
+
+    mainCanvas.setAttribute('width', '400');
+    mainCanvas.setAttribute('height', '400');
+
+    ctx.clearRect(0, 0, mainCanvas.width, mainCanvas.height);
+    ctx.drawImage(
+        profileImage,
+        0,
+        0,
+        profileImage.width,
+        profileImage.height,
+        profileImagePosX,
+        profileImagePosY,
+        mainCanvas.width,
+        mainCanvas.height,
+    );
+    ctx.drawImage(overlayImage, 0, 0, overlayImage.width, overlayImage.height, 0, 0, mainCanvas.width, mainCanvas.height);
+}
+
+function onDragCanvas(canvas, callback) {
+    var isDragging = false;
+
+    canvas.onmousedown = handleMouseDown
+    canvas.onmouseup = handleMouseUp
+    canvas.onmousemove = handleMouseMove
+
+    function handleMouseDown() {
+        isDragging = true;
+    }
+
+    function handleMouseUp() {
+        isDragging = false;
+    }
+
+    function handleMouseMove(event) {
+        var canvasMouseX = parseInt(event.pageX - this.offsetLeft);
+        var canvasMouseY = parseInt(event.pageY - this.offsetTop);
+
+        if(isDragging) {
+            callback(canvasMouseX, canvasMouseY);
+        }
     }
 }
