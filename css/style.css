@@ -123,6 +123,8 @@ h2 {
 	width: 400px;
 	height: 400px;
 	border: 2px solid #666681aa;
+	border-radius: 17%;
+	box-shadow: 0 24px 18px -20px rgba(34, 30, 75, 0.7);
 }
 
 .vert-move {
