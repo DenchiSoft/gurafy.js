@@ -47,7 +47,7 @@ window.onload = function () {
 
         profileImage.onload = function () {
             mainImage.style.display = 'none';
-            mainCanvas.style.display = 'inherit';
+            mainCanvas.style.display = 'inline';
             render({
                 mainCanvas,
                 profileImage,
