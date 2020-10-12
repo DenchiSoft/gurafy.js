@@ -1,12 +1,14 @@
 window.onload = function () {
 
-    var form = document.getElementById("main-form");
+    var mainForm = document.getElementById("main-form");
+    var mainImage = document.getElementById('gurafy_image');
+    var mainCanvas = document.getElementById('gurafy_canvas');
 
     function handleForm(event) {
         event.preventDefault();
         document.getElementById("button-create").click()
     }
-    form.addEventListener('submit', handleForm);
+    mainForm.addEventListener('submit', handleForm);
 
     var lastDownload;
 
@@ -22,6 +24,23 @@ window.onload = function () {
         downloadLink.click();
     }
 
+    // Prevent scrolling when touching the canvas
+    document.body.addEventListener("touchstart", function (e) {
+        if (e.target == mainCanvas) {
+            e.preventDefault();
+        }
+    }, false);
+    document.body.addEventListener("touchend", function (e) {
+        if (e.target == mainCanvas) {
+            e.preventDefault();
+        }
+    }, false);
+    document.body.addEventListener("touchmove", function (e) {
+        if (e.target == mainCanvas) {
+            e.preventDefault();
+        }
+    }, false);
+
     document.getElementById('button-create').onclick = function () {
         var twitProfilePicAPI = "https://unavatar.now.sh/twitter/";
 
@@ -36,9 +55,6 @@ window.onload = function () {
 
         var apiUrl = twitProfilePicAPI + screenName;
 
-        var mainImage = document.getElementById('gurafy_image');
-        var mainCanvas = document.getElementById('gurafy_canvas');
-
         var profileImage = new Image;
         var overlayImage = new Image;
 
@@ -47,7 +63,7 @@ window.onload = function () {
 
         profileImage.onload = function () {
             mainImage.style.display = 'none';
-            mainCanvas.style.display = 'inline';
+            mainCanvas.style.display = 'inherit';
             render({
                 mainCanvas,
                 profileImage,
@@ -76,8 +92,7 @@ window.onload = function () {
                 profileImage,
                 profileImagePosX: posX - profileImage.width / 2,
                 profileImagePosY: posY - profileImage.height / 2,
-            }),
-        );
+            }), );
     }
 
     var animateButton = function (e) {
@@ -112,7 +127,7 @@ function render({
     ctx.clearRect(0, 0, mainCanvas.width, mainCanvas.height);
 
     // background
-    ctx.fillStyle = '#D3E0E9';
+    ctx.fillStyle = '#383D41';
     ctx.fillRect(0, 0, mainCanvas.width, mainCanvas.height);
 
     ctx.drawImage(
@@ -124,8 +139,7 @@ function render({
         profileImagePosX,
         profileImagePosY,
         mainCanvas.width,
-        mainCanvas.height,
-    );
+        mainCanvas.height, );
     ctx.drawImage(overlayImage, 0, 0, overlayImage.width, overlayImage.height, 0, 0, mainCanvas.width, mainCanvas.height);
 }
 
@@ -133,8 +147,12 @@ function onDragCanvas(canvas, callback) {
     var isDragging = false;
 
     canvas.onmousedown = handleMouseDown
-    canvas.onmouseup = handleMouseUp
-    canvas.onmousemove = handleMouseMove
+        canvas.onmouseup = handleMouseUp
+        canvas.onmousemove = handleMouseMove
+
+        canvas.ontouchstart = handleMouseDown
+        canvas.ontouchend = handleMouseUp
+        canvas.ontouchmove = handleMouseMove
 
     function handleMouseDown() {
         isDragging = true;
@@ -148,7 +166,7 @@ function onDragCanvas(canvas, callback) {
         var canvasMouseX = parseInt(event.pageX - this.offsetLeft);
         var canvasMouseY = parseInt(event.pageY - this.offsetTop);
 
-        if(isDragging) {
+        if (isDragging) {
             callback(canvasMouseX, canvasMouseY);
         }
     }
