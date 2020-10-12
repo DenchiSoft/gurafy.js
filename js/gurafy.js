@@ -24,23 +24,6 @@ window.onload = function () {
         downloadLink.click();
     }
 
-    // Prevent scrolling when touching the canvas
-    document.body.addEventListener("touchstart", function (e) {
-        if (e.target == mainCanvas) {
-            e.preventDefault();
-        }
-    }, false);
-    document.body.addEventListener("touchend", function (e) {
-        if (e.target == mainCanvas) {
-            e.preventDefault();
-        }
-    }, false);
-    document.body.addEventListener("touchmove", function (e) {
-        if (e.target == mainCanvas) {
-            e.preventDefault();
-        }
-    }, false);
-
     document.getElementById('button-create').onclick = function () {
         var twitProfilePicAPI = "https://unavatar.now.sh/twitter/";
 
@@ -146,13 +129,9 @@ function render({
 function onDragCanvas(canvas, callback) {
     var isDragging = false;
 
-    canvas.onmousedown = handleMouseDown
-        canvas.onmouseup = handleMouseUp
-        canvas.onmousemove = handleMouseMove
-
-        canvas.ontouchstart = handleMouseDown
-        canvas.ontouchend = handleMouseUp
-        canvas.ontouchmove = handleMouseMove
+    canvas.onmousedown = handleMouseDown;
+    canvas.onmouseup = handleMouseUp;
+    canvas.onmousemove = handleMouseMove;
 
     function handleMouseDown() {
         isDragging = true;
