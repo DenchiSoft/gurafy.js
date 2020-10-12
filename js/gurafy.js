@@ -59,7 +59,7 @@ window.onload = function () {
 
             lastDownload = screenName;
 
-            shake(mainImage, 30);
+            shake(mainCanvas, 30);
         };
 
         profileImage.src = "";
