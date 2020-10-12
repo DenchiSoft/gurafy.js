@@ -110,6 +110,11 @@ function render({
     mainCanvas.setAttribute('height', '400');
 
     ctx.clearRect(0, 0, mainCanvas.width, mainCanvas.height);
+
+    // background
+    ctx.fillStyle = '#D3E0E9';
+    ctx.fillRect(0, 0, mainCanvas.width, mainCanvas.height);
+
     ctx.drawImage(
         profileImage,
         0,
