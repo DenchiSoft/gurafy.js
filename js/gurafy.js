@@ -132,6 +132,10 @@ function onDragCanvas(canvas, callback) {
     canvas.onmousedown = handleMouseDown;
     canvas.onmouseup = handleMouseUp;
     canvas.onmousemove = handleMouseMove;
+    canvas.ontouchstart = handleMouseDown;
+    canvas.ontouchend = handleMouseUp;
+    canvas.ontouchcancel = handleMouseUp;
+    canvas.ontouchmove = handleTouchMove;
 
     function handleMouseDown() {
         isDragging = true;
@@ -146,6 +150,16 @@ function onDragCanvas(canvas, callback) {
         var canvasMouseY = parseInt(event.pageY - this.offsetTop);
 
         if (isDragging) {
+            callback(canvasMouseX, canvasMouseY);
+        }
+    }
+
+    function handleTouchMove(event) {
+        var firstFingerTouch = event.touches[0];
+        var canvasMouseX = parseInt(firstFingerTouch.pageX - this.offsetLeft);
+        var canvasMouseY = parseInt(firstFingerTouch.pageY - this.offsetTop);
+
+        if(isDragging) {
             callback(canvasMouseX, canvasMouseY);
         }
     }
