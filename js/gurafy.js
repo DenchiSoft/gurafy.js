@@ -25,7 +25,7 @@ window.onload = function () {
     }
 
     document.getElementById('button-create').onclick = function () {
-        var twitProfilePicAPI = "https://unavatar.now.sh/twitter/";
+        var twitProfilePicAPI = "https://twivatar.glitch.me/";
 
         var userInput = document.getElementById('twitter-handle-input').value;
         var screenName = userInput.substr(userInput.lastIndexOf("/") + 1);
